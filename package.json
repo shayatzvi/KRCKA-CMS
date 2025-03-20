@@ -10,7 +10,8 @@
     "gatsby-transformer-remark": "^5.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "sharp": "^0.31.0"
   },
   "scripts": {
     "develop": "gatsby develop",
