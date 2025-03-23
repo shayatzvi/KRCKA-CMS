@@ -1,0 +1,80 @@
+backend:
+  name: git-gateway
+  branch: main
+  identity_url: "https://yoursite.netlify.app/.netlify/identity"
+  gateway_url: "https://yoursite.netlify.app/.netlify/git/github"
+  repo: owner/repo  # Replace with your GitHub username/repo
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+local_backend: true
+
+# Enable editorial workflow for content approval
+publish_mode: editorial_workflow
+
+collections:
+  - name: "establishments"
+    label: "Establishments"
+    folder: "content/establishments"
+    create: true
+    identifier_field: "name"
+    format: "json"
+    fields:
+      - { label: "Establishment Name", name: "name", widget: "string" }
+      - { label: "Location", name: "location", widget: "string" }
+      - { label: "Company", name: "company", widget: "string" }
+      - { label: "Kosher Status", name: "kosher_status", widget: "select", options: ["Kosher", "Kosher Dairy", "Kosher Meat", "Kosher Pareve", "Not Kosher"] }
+      - { label: "Certificate", name: "certificate", widget: "image" }
+    access:
+      - {roles: [admin, mashgiach]}
+
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    identifier_field: "name"
+    format: "json"
+    fields:
+      - { label: "Product Name", name: "name", widget: "string" }
+      - { label: "Kosher Status", name: "kosher_status", widget: "select", options: ["Kosher", "Kosher Dairy", "Kosher Meat", "Kosher Pareve", "Not Kosher"] }
+      - { label: "Product Brand", name: "brand", widget: "string" }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - { label: "Product Image", name: "image", widget: "image", required: false }
+    access:
+      - {roles: [admin, mashgiach]}
+
+  - name: "mashgiach_logs"
+    label: "Mashgiach Logs"
+    folder: "content/logs"
+    create: true
+    format: "json"
+    fields:
+      - { label: "Establishment", name: "establishment", widget: "relation", collection: "establishments", search_fields: ["name"], value_field: "name", display_fields: ["name"] }
+      - { label: "Mashgiach Name", name: "mashgiach_name", widget: "string" }
+      - { label: "Date and Time", name: "datetime", widget: "datetime" }
+      - { label: "Description of Work", name: "description", widget: "text" }
+    access:
+      - {roles: [admin, mashgiach]}
+
+  - name: "pages"
+    label: "Pages"
+    folder: "content/pages"
+    create: true
+    format: "json"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Content", name: "body", widget: "markdown" }
+      - { label: "Form Configuration", name: "form", widget: "object", required: false, fields: [
+          { label: "Enable Form", name: "enable", widget: "boolean", default: false },
+          { label: "Form Title", name: "title", widget: "string", required: false },
+          { label: "Form Fields", name: "fields", widget: "list", required: false, fields: [
+            { label: "Field Label", name: "label", widget: "string" },
+            { label: "Field Type", name: "type", widget: "select", options: ["text", "textarea", "email", "tel", "select", "checkbox"] },
+            { label: "Required", name: "required", widget: "boolean", default: false },
+            { label: "Options (for select)", name: "options", widget: "list", required: false }
+          ]}
+        ]}
+    access:
+      - {roles: [admin]}

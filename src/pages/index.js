@@ -1,78 +1,79 @@
-import React from 'react';
-import { graphql } from 'gatsby';
-import Footer from '../components/Footer';
+import React, { useState, useEffect } from 'react';
+import EstablishmentsTable from '../components/EstablishmentsTable';
+import ProductsTable from '../components/ProductsTable';
 
-const HomePage = ({ data }) => {
-  const establishments = data.allMarkdownRemark.edges.filter(edge => edge.node.frontmatter.collection === 'establishments');
-  const products = data.allMarkdownRemark.edges.filter(edge => edge.node.frontmatter.collection === 'products');
+const HomePage = () => {
+  const [establishments, setEstablishments] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // In a real application, you would fetch this data from your content API
+    // For demonstration purposes, we're using a timeout to simulate data fetching
+    const fetchData = async () => {
+      try {
+        // Simulate API calls
+        // In production, replace with actual API calls to your CMS
+        setTimeout(() => {
+          // Example data
+          setEstablishments([
+            {
+              name: 'Example Restaurant',
+              location: 'New York, NY',
+              company: 'Example Co.',
+              kosher_status: 'Kosher',
+              certificate: '/uploads/sample-certificate.jpg'
+            },
+            {
+              name: 'Sample Bakery',
+              location: 'Los Angeles, CA',
+              company: 'Sample Inc.',
+              kosher_status: 'Kosher Dairy',
+              certificate: '/uploads/sample-certificate2.jpg'
+            }
+          ]);
+          
+          setProducts([
+            {
+              name: 'Matzo',
+              brand: 'Manischewitz',
+              kosher_status: 'Kosher Pareve',
+              description: 'Traditional unleavened bread'
+            },
+            {
+              name: 'Challah Bread',
+              brand: 'Zomick\'s',
+              kosher_status: 'Kosher Pareve',
+              description: 'Traditional braided bread'
+            }
+          ]);
+          
+          setLoading(false);
+        }, 1000);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Loading data...</div>;
+  }
 
   return (
-    <div>
-      <h1>Establishments</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Company</th>
-            <th>Kosher Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {establishments.map(({ node }) => (
-            <tr key={node.id}>
-              <td>{node.frontmatter.name}</td>
-              <td>{node.frontmatter.location}</td>
-              <td>{node.frontmatter.company}</td>
-              <td>{node.frontmatter.kosher_status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h1>Products</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Kosher Status</th>
-            <th>Brand</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(({ node }) => (
-            <tr key={node.id}>
-              <td>{node.frontmatter.name}</td>
-              <td>{node.frontmatter.kosher_status}</td>
-              <td>{node.frontmatter.brand}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <Footer />
+    <div className="home-page">
+      <div className="container">
+        <h1>Welcome to KRCKA</h1>
+        <p>Your trusted source for kosher certification information.</p>
+        
+        <EstablishmentsTable establishments={establishments} />
+        <ProductsTable products={products} />
+      </div>
     </div>
   );
 };
-
-export const query = graphql`
-  query {
-    allMarkdownRemark {
-      edges {
-        node {
-          id
-          frontmatter {
-            collection
-            name
-            location
-            company
-            kosher_status
-            brand
-          }
-        }
-      }
-    }
-  }
-`;
 
 export default HomePage;
