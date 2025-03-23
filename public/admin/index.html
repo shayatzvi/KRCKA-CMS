@@ -6,19 +6,68 @@
   <title>KRCKA Admin</title>
   <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    .role-restricted-message {
+      display: none;
+      padding: 20px;
+      background-color: #f8d7da;
+      color: #721c24;
+      margin: 20px;
+      border-radius: 4px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
+  <div id="role-message" class="role-restricted-message">
+    You don't have permission to access this area. Please contact an administrator.
+  </div>
+
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
   <script>
-    // Control access based on user roles
+    // Check for user roles and handle access
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
           window.netlifyIdentity.on("login", () => {
             document.location.href = "/admin/";
           });
+        } else {
+          // User is logged in, check roles
+          const userRoles = user.app_metadata.roles || [];
+          const hasValidRole = userRoles.some(role => ['admin', 'mashgiach'].includes(role));
+          
+          if (!hasValidRole) {
+            // Show message for users without valid roles
+            document.getElementById('role-message').style.display = 'block';
+          }
+        }
+      });
+    }
+
+    // Add this to your admin/index.html
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (user) {
+          const userRoles = user.app_metadata.roles || [];
+          
+          // Custom styling based on role
+          if (userRoles.includes('admin')) {
+            document.body.classList.add('role-admin');
+          } else if (userRoles.includes('mashgiach')) {
+            document.body.classList.add('role-mashgiach');
+            
+            // You could potentially hide certain UI elements here
+            // This is just an example - the CMS access control already handles permissions
+            setTimeout(() => {
+              const pagesCollection = document.querySelector('[href="#/collections/pages"]');
+              if (pagesCollection) {
+                pagesCollection.style.display = 'none';
+              }
+            }, 1000);
+          }
         }
       });
     }

@@ -1,9 +1,8 @@
 backend:
   name: git-gateway
   branch: main
-  identity_url: "https://yoursite.netlify.app/.netlify/identity"
-  gateway_url: "https://yoursite.netlify.app/.netlify/git/github"
-  repo: owner/repo  # Replace with your GitHub username/repo
+  identity_url: "https://your-site-name.netlify.app/.netlify/identity"
+  gateway_url: "https://your-site-name.netlify.app/.netlify/git/github"
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
@@ -27,7 +26,7 @@ collections:
       - { label: "Kosher Status", name: "kosher_status", widget: "select", options: ["Kosher", "Kosher Dairy", "Kosher Meat", "Kosher Pareve", "Not Kosher"] }
       - { label: "Certificate", name: "certificate", widget: "image" }
     access:
-      - {roles: [admin, mashgiach]}
+      - roles: [admin, mashgiach]
 
   - name: "products"
     label: "Products"
@@ -42,7 +41,7 @@ collections:
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Product Image", name: "image", widget: "image", required: false }
     access:
-      - {roles: [admin, mashgiach]}
+      - roles: [admin, mashgiach]
 
   - name: "mashgiach_logs"
     label: "Mashgiach Logs"
@@ -55,7 +54,7 @@ collections:
       - { label: "Date and Time", name: "datetime", widget: "datetime" }
       - { label: "Description of Work", name: "description", widget: "text" }
     access:
-      - {roles: [admin, mashgiach]}
+      - roles: [admin, mashgiach]
 
   - name: "pages"
     label: "Pages"
@@ -77,4 +76,4 @@ collections:
           ]}
         ]}
     access:
-      - {roles: [admin]}
+      - roles: [admin]
