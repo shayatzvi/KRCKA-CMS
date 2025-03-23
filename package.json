@@ -37,9 +37,11 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }
-},
+
 
 
 "scripts": {
   "clean-install": "rm -rf node_modules && rm -rf package-lock.json && npm install"
+}
+
 }
