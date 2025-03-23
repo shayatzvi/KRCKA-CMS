@@ -3,11 +3,20 @@ backend:
   branch: main
   identity_url: "https://your-site-name.netlify.app/.netlify/identity"
   gateway_url: "https://your-site-name.netlify.app/.netlify/git/github"
+  auth_scope: repo
+  auth_type: implicit
+
+# Define roles at the top level
+roles:
+  - name: admin
+    description: "Full access to all collections"
+  - name: mashgiach
+    description: "Access to Establishments, Products, and Logs"
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
-local_backend: true
+
 
 # Enable editorial workflow for content approval
 publish_mode: editorial_workflow
@@ -26,7 +35,7 @@ collections:
       - { label: "Kosher Status", name: "kosher_status", widget: "select", options: ["Kosher", "Kosher Dairy", "Kosher Meat", "Kosher Pareve", "Not Kosher"] }
       - { label: "Certificate", name: "certificate", widget: "image" }
     access:
-      - roles: [admin, mashgiach]
+      roles: [admin, mashgiach]
 
   - name: "products"
     label: "Products"

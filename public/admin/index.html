@@ -30,6 +30,7 @@
     // Check for user roles and handle access
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
+        console.log("User initialized:", user);
         if (!user) {
           window.netlifyIdentity.on("login", () => {
             document.location.href = "/admin/";
@@ -50,13 +51,14 @@
     // Add this to your admin/index.html
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
+        console.log("User initialized:", user);
         if (user) {
-          const userRoles = user.app_metadata.roles || [];
+          console.log("User roles:", user.app_metadata ? user.app_metadata.roles : "No roles found");
           
           // Custom styling based on role
-          if (userRoles.includes('admin')) {
+          if (user.app_metadata.roles.includes('admin')) {
             document.body.classList.add('role-admin');
-          } else if (userRoles.includes('mashgiach')) {
+          } else if (user.app_metadata.roles.includes('mashgiach')) {
             document.body.classList.add('role-mashgiach');
             
             // You could potentially hide certain UI elements here
@@ -69,6 +71,13 @@
             }, 1000);
           }
         }
+      });
+    }
+
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("login", user => {
+        console.log("User logged in:", user);
+        console.log("User roles after login:", user.app_metadata ? user.app_metadata.roles : "No roles found");
       });
     }
   </script>
