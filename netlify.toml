@@ -1,7 +1,12 @@
 [build]
   publish = "build"
   command = "npm run build"
-  node_version = "16"
+
+[build.environment]
+  NODE_VERSION = "16"
+  NPM_VERSION = "8"
+  # Explicitly disabling Go
+  GO_IMPORT_PATH = ""
 
 [[redirects]]
   from = "/*"
